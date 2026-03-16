@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>AI Course Recommendation</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f5f5f5;
+text-align:center;
+}
+
+h2{
+color:#333;
+}
+
+.search-box{
+margin:20px;
+}
+
+input{
+padding:10px;
+width:300px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+button{
+padding:10px 20px;
+background:#007bff;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0056b3;
+}
+
+.container{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+margin-top:30px;
+}
+
+.card{
+background:white;
+width:300px;
+margin:15px;
+padding:20px;
+border-radius:10px;
+box-shadow:0px 2px 10px rgba(0,0,0,0.1);
+text-align:left;
+}
+
+.card h4{
+margin:0;
+color:#333;
+}
+
+.platform{
+color:#777;
+font-size:14px;
+margin-top:5px;
+}
+
+.rating{
+color:#ff9800;
+margin-top:5px;
+}
+
+.open-btn{
+display:inline-block;
+margin-top:10px;
+padding:8px 15px;
+background:#28a745;
+color:white;
+text-decoration:none;
+border-radius:5px;
+}
+
+.open-btn:hover{
+background:#1e7e34;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>AI Course Recommendation System</h2>
+
+<div class="search-box">
+
+<form method="POST">
+
+<input
+type="text"
+name="course"
+id="course"
+placeholder="Enter course name"
+list="suggestions"
+autocomplete="off"
+required
+>
+
+<datalist id="suggestions"></datalist>
+
+<button type="submit">Recommend</button>
+
+</form>
+
+</div>
+
+
+<div class="container">
+
+{% for r in results %}
+
+<div class="card">
+
+<h4>{{ r.title }}</h4>
+
+<div class="platform">
+Platform: Coursera / Udemy
+</div>
+
+<div class="rating">
+⭐ 4.5 Rating
+</div>
+
+<a class="open-btn" href="{{ r.url }}" target="_blank">
+Open Course
+</a>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+
+<script>
+
+const input = document.getElementById("course");
+
+input.addEventListener("input", function(){
+
+let query = this.value;
+
+fetch("/search?q=" + query)
+
+.then(response => response.json())
+
+.then(data => {
+
+let datalist = document.getElementById("suggestions");
+
+datalist.innerHTML = "";
+
+data.forEach(item => {
+
+let option = document.createElement("option");
+
+option.value = item;
+
+datalist.appendChild(option);
+
+});
+
+});
+
+});
+
+</script>
+
+
+</body>
+
+</html>
